@@ -1,0 +1,11 @@
+[package]
+name = "expenses_stat"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+rand = "0.8.3"
+chrono = "0.4.19"
+calamine = "0.18.0"
+lazy_static = "1.4.0"
+postgres = { version = "0.19.1", features = ["with-time-0_2", "with-chrono-0_4"] }

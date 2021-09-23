@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  db:
+    build: db
+    environment:
+      - POSTGRES_DB=expenses
+      - POSTGRES_USER=expenses
+      - POSTGRES_PASSWORD=expenses
+    ports:
+      - "127.0.0.1:30231:5432/tcp"
+    healthcheck:
+      test: ps -p 1 -o comm= | grep postgres
+      interval: 1s
+      timeout: 5s
+      retries: 20
