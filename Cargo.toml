@@ -3,9 +3,26 @@ name = "expenses_stat"
 version = "0.1.0"
 edition = "2018"
 
+[lib]
+name = "frontend"
+path = "src/frontend/lib.rs"
+crate-type = ["rlib", "cdylib"]
+
+[[bin]]
+name = "backend"
+path = "src/backend/main.rs"
+required-features = ["backend-only-deps"]
+
+[features]
+backend-only-deps = ["postgres"]
+
 [dependencies]
-rand = "0.8.3"
-chrono = "0.4.19"
 calamine = "0.18.0"
+chrono = "0.4.19"
+getrandom = { version = "0.2.3", features = ["js"] }
 lazy_static = "1.4.0"
-postgres = { version = "0.19.1", features = ["with-time-0_2", "with-chrono-0_4"] }
+postgres = { version = "0.19.1", features = ["with-time-0_2", "with-chrono-0_4"], optional = true }
+rand = "0.8.3"
+wasm-bindgen = "0.2.78"
+web-sys = "0.3.55"
+yew = "0.18.0"

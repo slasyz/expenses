@@ -1,12 +1,14 @@
 mod reader;
 
+use std::env;
+use std::error::Error;
+
 use calamine::{open_workbook, Xlsx};
 use postgres::{Client, NoTls};
 
 use crate::reader::parsers::parse_sheets;
-use std::error::Error;
 
-fn things() -> Result<(), Box<dyn Error>> {
+fn parse_and_insert() -> Result<(), Box<dyn Error>> {
     let path = "/Users/slasyz/Dropbox/Расходы.xlsx";
     let mut workbook: Xlsx<_> = open_workbook(path)?;
 
@@ -31,9 +33,22 @@ fn things() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+fn things() -> Result<(), Box<dyn Error>> {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        return Result::Err(format!("Usage: {} [parse|serve]", args.get(0).unwrap()).into());
+    }
+
+    match args.get(1).unwrap().as_str() {
+        "parse" => parse_and_insert(),
+        // "serve" => TODO
+        _ => Result::Err("Unknown subcommand.".into()),
+    }
+}
+
 fn main() {
     match things() {
         Ok(_) => return,
-        Err(err) => panic!("Error: {}", err.to_string()),
+        Err(err) => println!("{}", err.to_string()),
     }
 }
