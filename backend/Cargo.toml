@@ -1,0 +1,12 @@
+[package]
+name = "backend"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+calamine = "0.18.0"
+chrono = "0.4.19"
+getrandom = { version = "0.2.3", features = ["js"] }
+lazy_static = "1.4.0"
+postgres = { version = "0.19.1", features = ["with-time-0_2", "with-chrono-0_4"] }
+rand = "0.8.3"
