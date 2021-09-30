@@ -65,7 +65,7 @@ pub fn parse_sheets(workbook: &mut Xlsx<BufReader<File>>) -> Result {
             .worksheet_range(sheet_name.as_str())
             .ok_or(ParseError::msg(format!("Cannot find '{}'", sheet_name)))??;
 
-        println!("reading sheet '{}'", sheet_name);
+        eprintln!("reading sheet '{}'", sheet_name);
 
         parser = match PARSERS.get(sheet_name.as_str()) {
             Some(parser) => parser,
@@ -74,7 +74,7 @@ pub fn parse_sheets(workbook: &mut Xlsx<BufReader<File>>) -> Result {
 
         let mut sheet_expenses: Vec<Expense> = parser(sheet_name, sheet)?;
         for expense in &sheet_expenses {
-            println!("- {:?}", expense);
+            eprintln!("- {:?}", expense);
         }
         result.append(&mut sheet_expenses);
     }
