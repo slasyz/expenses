@@ -11,7 +11,7 @@ use crate::reader::Expense;
 
 enum RowFirst {
     Date(NaiveDate),
-    Expense(String, u32),
+    Expense { title: String, amount: u32 },
     Empty,
 }
 
@@ -54,7 +54,7 @@ fn parse_row_first(year: i32, row: &[DataType]) -> core::result::Result<RowFirst
         _ => return Err("Unexpected datatype in title cell.".into()),
     };
 
-    Ok(RowFirst::Expense(title, amount))
+    Ok(RowFirst::Expense { title, amount })
 }
 
 // Start:
@@ -81,7 +81,7 @@ pub fn parse_first(sheet_name: String, sheet: Range<DataType>) -> Result {
             }
         };
         let (title, amount) = match parsed_row {
-            RowFirst::Expense(title, amount) => (title, amount),
+            RowFirst::Expense { title, amount } => (title, amount),
             RowFirst::Date(val) => {
                 date = Some(val);
                 continue;

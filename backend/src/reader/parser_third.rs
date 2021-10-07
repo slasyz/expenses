@@ -9,7 +9,11 @@ use crate::reader::Expense;
 use std::error::Error;
 
 enum RowThird {
-    Expense(NaiveDate, String, u32),
+    Expense {
+        date: NaiveDate,
+        title: String,
+        amount: u32,
+    },
     Empty,
 }
 
@@ -70,7 +74,11 @@ fn parse_row_third(
         _ => return Err("Unexpected datatype in title cell.".into()),
     };
 
-    Ok(RowThird::Expense(parsed_date, title, amount))
+    Ok(RowThird::Expense {
+        date: parsed_date,
+        title,
+        amount,
+    })
 }
 
 // Ноябрь-декабрь 2020:
@@ -96,17 +104,21 @@ pub fn parse_third(sheet_name: String, sheet: Range<DataType>) -> Result {
                 })
             }
         };
-        let (date, title, amount) = match parsed_row {
-            RowThird::Expense(date, title, amount) => (date, title, amount),
+        let expense = match parsed_row {
+            RowThird::Expense {
+                date,
+                title,
+                amount,
+            } => Expense {
+                date,
+                title,
+                amount,
+            },
             RowThird::Empty => continue,
         };
-        current_date = Some(date);
+        current_date = Some(expense.date);
 
-        result.push(Expense {
-            date,
-            title,
-            amount,
-        });
+        result.push(expense);
     }
 
     Ok(result)
